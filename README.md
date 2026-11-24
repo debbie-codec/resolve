@@ -1,16 +1,78 @@
-# React + Vite
+# Resolve
 
-This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.
+Resolve is a standalone React customer support ticket management application.
 
-Currently, two official plugins are available:
+## Features
 
-- [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react) uses [Oxc](https://oxc.rs)
-- [@vitejs/plugin-react-swc](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react-swc) uses [SWC](https://swc.rs/)
+- Dashboard counts and priority summaries derived from the current ticket list
+- Create, view, edit and delete tickets
+- Delete confirmation dialog
+- Search by title or description
+- Filter by status and priority
+- Sort tickets by creation date
+- Ticket assignment from support-staff API data
+- Loading, request failure and empty-staff states
+- Inline create/edit validation and operation feedback
+- Responsive layouts for mobile, tablet and desktop
+- Browser localStorage persistence
 
-## React Compiler
+## Technologies
 
-The React Compiler is not enabled on this template because of its impact on dev & build performances. To add it, see [this documentation](https://react.dev/learn/react-compiler/installation).
+- React 19
+- JavaScript
+- Vite
+- Tailwind CSS
+- Recharts
+- Lucide React
 
-## Expanding the ESLint configuration
+## Local setup
 
-If you are developing a production application, we recommend using TypeScript with type-aware lint rules enabled. Check out the [TS template](https://github.com/vitejs/vite/tree/main/packages/create-vite/template-react-ts) for information on how to integrate TypeScript and [`typescript-eslint`](https://typescript-eslint.io) in your project.
+Requirements: Node.js 20 or newer and npm or pnpm.
+
+```bash
+npm install
+npm run dev
+```
+
+Open the local address printed by Vite, normally `http://localhost:5173`.
+
+```bash
+npm run build
+npm run lint
+npm run preview
+```
+
+## Ticket data
+
+Sample tickets are included for the first visit. Ticket changes are stored in browser `localStorage` under `resolve.tickets.v1`, so created, edited and deleted tickets remain after a refresh.
+
+The application validates the stored ticket array when loading it. Invalid or unreadable saved data falls back to the sample tickets and displays a message.
+
+## Support staff API
+
+Support staff are loaded from JSONPlaceholder:
+
+`https://jsonplaceholder.typicode.com/users`
+
+The response is normalized into staff names and email addresses for the assignment selector and team directory. The application shows loading, retryable request failure and empty-response states.
+
+## Known limitations
+
+- This is a frontend-only application; no production authentication or backend database is used.
+- JSONPlaceholder is mock data. User records are not maintained or created in Resolve.
+- Team invitation is a frontend demonstration and is not persisted or sent to a server.
+- Settings and profile changes remain local/demo behavior.
+- Ticket activity is a demo timeline and is not generated from server-side event history.
+- Illustrative SLA and analytics values are not backed by live service data.
+
+## AI Usage
+
+GitHub Copilot/Copilot SDK AI assistance was used to:
+
+- Review the existing React project structure
+- Implement localStorage ticket state and CRUD interactions
+- Connect mock support-staff API loading and failure states
+- Add inline ticket-form validation and accessible feedback
+- Update documentation and assess requirement coverage
+
+Major code and behavior decisions were reviewed and tested by the candidate, including ticket data structure, localStorage behavior and assignment integration.
