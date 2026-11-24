@@ -1,6 +1,6 @@
 function TicketStats({ stats, dashboard = false }) {
   return (
-    <section className="mb-4 grid grid-cols-1 gap-3 sm:grid-cols-2 xl:grid-cols-4" aria-label="Ticket summary">
+    <section className="mb-4 grid grid-cols-2 gap-3 xl:grid-cols-4" aria-label="Ticket summary">
       {stats.map(({ label, value, change, icon: Icon, iconClass, bg }) => (
         <article className={`surface-panel flex ${dashboard ? "items-start gap-3 p-4" : "items-center p-4"}`} key={label}>
           <span className={`grid h-9 w-9 shrink-0 place-items-center rounded-full ${bg} ${iconClass} ${dashboard ? "" : "mr-3"}`}><Icon size={18} /></span>
