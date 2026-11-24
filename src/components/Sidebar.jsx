@@ -10,13 +10,13 @@ import {
 
 const links = [
   { label: "Dashboard", icon: LayoutDashboard },
-  { label: "Tickets", icon: Ticket, count: "128", active: true },
+  { label: "Tickets", icon: Ticket, active: true },
   { label: "Analytics", icon: BarChart3 },
   { label: "Team", icon: Users },
   { label: "Settings", icon: Settings },
 ];
 
-function Sidebar({ activeView = "Tickets", onNavigate }) {
+function Sidebar({ activeView = "Tickets", onNavigate, ticketCount = 0 }) {
   return (
     <aside className="sticky top-0 flex h-screen w-14 shrink-0 flex-col bg-[#642d1d] px-2 py-4 text-orange-50 sm:w-16 lg:w-52 lg:px-3">
       <a href="/" className="flex items-start justify-center gap-2 border-b border-white/20 px-1 pb-4 text-inherit no-underline lg:justify-start">
@@ -28,7 +28,7 @@ function Sidebar({ activeView = "Tickets", onNavigate }) {
       </a>
 
       <nav className="mt-5 grid gap-1" aria-label="Main navigation">
-        {links.map(({ label, icon: Icon, count }) => (
+        {links.map(({ label, icon: Icon }) => (
           <button
             className={`flex h-10 items-center justify-center gap-3 rounded-lg px-2 text-left text-xs transition-colors lg:justify-start lg:px-3 ${
               label === activeView ? "bg-[#a34b32] text-white" : "text-orange-100 hover:bg-white/10"
@@ -39,7 +39,11 @@ function Sidebar({ activeView = "Tickets", onNavigate }) {
           >
             <Icon size={18} />
             <span className="hidden flex-1 lg:block">{label}</span>
-            {count && <small className="hidden rounded-full bg-orange-700 px-1.5 py-0.5 text-[9px] lg:block">{count}</small>}
+            {label === "Tickets" && (
+              <small className="hidden rounded-full bg-orange-700 px-1.5 py-0.5 text-[9px] lg:block">
+                {ticketCount}
+              </small>
+            )}
           </button>
         ))}
       </nav>

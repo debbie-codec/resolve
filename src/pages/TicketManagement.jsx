@@ -30,6 +30,7 @@ function TicketManagement({
   onUpdateTicket,
   onDeleteTicket,
   onUpdateStatus,
+  onUpdateStatuses,
 }) {
   const [search, setSearch] = useState("");
   const [status, setStatus] = useState("All");
@@ -40,6 +41,8 @@ function TicketManagement({
   const [selectedTicketId, setSelectedTicketId] = useState(initialTicketId);
   const [page, setPage] = useState(1);
   const [sortOrder, setSortOrder] = useState("newest");
+  const [bulkAction, setBulkAction] = useState("");
+  const [bulkStatus, setBulkStatus] = useState("Open");
 
   const filteredTickets = useMemo(() => tickets
     // Derive the visible list from the complete ticket list for search/filter/sort.
@@ -59,12 +62,28 @@ function TicketManagement({
   const visibleTickets = filteredTickets.slice((currentPage - 1) * PAGE_SIZE, currentPage * PAGE_SIZE);
   const allSelected = visibleTickets.length > 0 && visibleTickets.every((ticket) => selected.includes(ticket.id));
   const selectedTicket = tickets.find((ticket) => ticket.id === selectedTicketId);
+  const selectedTickets = tickets.filter((ticket) => selected.includes(ticket.id));
   const stats = getTicketStats(tickets);
 
   const toggleSelected = (id) => {
     setSelected((current) => current.includes(id)
       ? current.filter((item) => item !== id)
       : [...current, id]);
+  };
+
+  const applyBulkAction = () => {
+    if (bulkAction === "delete") {
+      if (selectedTickets.length > 0) onDeleteTicket(selectedTickets);
+      setSelected([]);
+      setBulkAction("");
+      return;
+    }
+
+    if (bulkAction === "status" && selectedTickets.length > 0) {
+      onUpdateStatuses(selectedTickets.map((ticket) => ticket.id), bulkStatus);
+      setSelected([]);
+      setBulkAction("");
+    }
   };
 
   const toggleAll = () => {
@@ -183,6 +202,47 @@ function TicketManagement({
         {tickets.length > 0 && filteredTickets.length === 0 && (
           <p className="px-4 py-12 text-center text-sm text-stone-600">No tickets match your search and filters.</p>
         )}
+        {selectedTickets.length > 0 && (
+          <div className="flex flex-wrap items-center gap-2 border-t border-stone-100 bg-[#faf7f2] px-4 py-3">
+            <span className="mr-auto text-[10px] font-medium text-stone-600">
+              {selectedTickets.length} {selectedTickets.length === 1 ? "ticket" : "tickets"} selected
+            </span>
+            <label className="sr-only" htmlFor="ticket-bulk-action">Choose an action for selected tickets</label>
+            <select
+              id="ticket-bulk-action"
+              value={bulkAction}
+              onChange={(event) => setBulkAction(event.target.value)}
+              className="form-control h-8 px-2 text-[10px]"
+            >
+              <option value="">Choose an action</option>
+              <option value="status">Change status</option>
+              <option value="delete">Delete selected</option>
+            </select>
+            {bulkAction === "status" && (
+              <>
+                <label className="sr-only" htmlFor="ticket-bulk-status">New status</label>
+                <select
+                  id="ticket-bulk-status"
+                  value={bulkStatus}
+                  onChange={(event) => setBulkStatus(event.target.value)}
+                  className="form-control h-8 px-2 text-[10px]"
+                >
+                  <option>Open</option>
+                  <option>In Progress</option>
+                  <option>Resolved</option>
+                </select>
+              </>
+            )}
+            <button
+              type="button"
+              disabled={!bulkAction}
+              onClick={applyBulkAction}
+              className="primary-button h-8 disabled:cursor-not-allowed disabled:opacity-50"
+            >
+              Apply
+            </button>
+          </div>
+        )}
         {filteredTickets.length > 0 && (
           <>
             <TicketTable
@@ -192,6 +252,7 @@ function TicketManagement({
               onToggleAll={toggleAll}
               onToggleSelected={toggleSelected}
               onOpenTicket={(ticket) => setSelectedTicketId(ticket.id)}
+              onDeleteTicket={onDeleteTicket}
             />
             <TicketPagination
               count={filteredTickets.length}

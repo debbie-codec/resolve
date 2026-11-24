@@ -89,10 +89,10 @@ function TicketCreate({
           <section className="surface-panel grid gap-4 p-4">
             <h2 className="border-b border-stone-100 pb-2 text-xs font-bold">Ticket Information</h2>
             <Field id="ticket-title" label="Title" error={errors.title}>
-              <input id="ticket-title" name="title" value={values.title} onChange={updateField} maxLength={120} required className="form-control w-full" aria-invalid={Boolean(errors.title)} aria-describedby={errors.title ? "ticket-title-error" : undefined} />
+              <input id="ticket-title" name="title" value={values.title} onChange={updateField} maxLength={120} required className="form-control w-full" placeholder="e.g. Unable to reset my password" aria-invalid={Boolean(errors.title)} aria-describedby={errors.title ? "ticket-title-error" : undefined} />
             </Field>
             <Field id="ticket-description" label="Description" error={errors.description}>
-              <textarea id="ticket-description" name="description" value={values.description} onChange={updateField} rows={5} required className="form-control w-full py-2" aria-invalid={Boolean(errors.description)} aria-describedby={errors.description ? "ticket-description-error" : undefined} />
+              <textarea id="ticket-description" name="description" value={values.description} onChange={updateField} rows={5} required className="form-control w-full py-2" placeholder="Describe what happened, what you tried, and any error message you saw." aria-invalid={Boolean(errors.description)} aria-describedby={errors.description ? "ticket-description-error" : undefined} />
             </Field>
             <div className="grid gap-3 sm:grid-cols-2">
               <Field id="ticket-category" label="Category" error={errors.category}>

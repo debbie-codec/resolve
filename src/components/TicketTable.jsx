@@ -1,3 +1,4 @@
+import { useState } from "react";
 import { MoreHorizontal } from "lucide-react";
 import { formatTicketDate } from "../data/tickets";
 
@@ -14,7 +15,9 @@ function statusClass(status) {
   return "bg-amber-50 text-amber-700";
 }
 
-function TicketTable({ tickets, selected, allSelected, onToggleAll, onToggleSelected, onOpenTicket }) {
+function TicketTable({ tickets, selected, allSelected, onToggleAll, onToggleSelected, onOpenTicket, onDeleteTicket }) {
+  const [openMenuId, setOpenMenuId] = useState(null);
+
   return (
     <div className="overflow-x-auto">
       <table className="w-full min-w-[1050px] text-left text-[11px]">
@@ -36,7 +39,35 @@ function TicketTable({ tickets, selected, allSelected, onToggleAll, onToggleSele
               <td className="px-2 py-2"><span className={`rounded-full px-2 py-1 text-[9px] ${statusClass(ticket.status)}`}>{ticket.status}</span></td>
               <td className="px-2 py-2"><span className="inline-flex items-center gap-1.5"><i className="grid h-6 w-6 place-items-center rounded-full bg-[#d7c2ae] text-[8px] font-semibold not-italic text-[#5c4638]">{ticket.avatar}</i>{ticket.assignee}</span></td>
               <td className="whitespace-nowrap px-2 py-2 text-stone-500">{formatTicketDate(ticket.createdAt)}</td>
-              <td className="px-2 py-2"><button type="button" aria-label={`More options for ${ticket.id}`} onClick={(event) => event.stopPropagation()}><MoreHorizontal size={15} /></button></td>
+              <td className="relative px-2 py-2">
+                <button
+                  type="button"
+                  aria-label={`More options for ${ticket.id}`}
+                  aria-expanded={openMenuId === ticket.id}
+                  onClick={(event) => {
+                    event.stopPropagation();
+                    setOpenMenuId((current) => current === ticket.id ? null : ticket.id);
+                  }}
+                >
+                  <MoreHorizontal size={15} />
+                </button>
+                {openMenuId === ticket.id && (
+                  <div role="menu" className="absolute right-2 top-8 z-10 min-w-32 rounded-md border border-stone-200 bg-white p-1 shadow-lg">
+                    <button
+                      type="button"
+                      role="menuitem"
+                      className="w-full rounded px-2 py-1.5 text-left text-[10px] text-rose-700 hover:bg-rose-50"
+                      onClick={(event) => {
+                        event.stopPropagation();
+                        setOpenMenuId(null);
+                        onDeleteTicket?.(ticket);
+                      }}
+                    >
+                      Delete ticket
+                    </button>
+                  </div>
+                )}
+              </td>
             </tr>
           ))}
           {tickets.length === 0 && <tr><td colSpan={9} className="py-12 text-center text-stone-500">No tickets match your search.</td></tr>}

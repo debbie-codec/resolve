@@ -61,20 +61,29 @@ function useTicketStore() {
   };
 
   const deleteTicket = (id) => {
-    setTickets((current) => current.filter((ticket) => ticket.id !== id));
-    setNotice("Ticket deleted successfully.");
+    deleteTickets([id]);
+  };
+
+  const deleteTickets = (ids) => {
+    setTickets((current) => current.filter((ticket) => !ids.includes(ticket.id)));
+    setNotice(ids.length === 1 ? "Ticket deleted successfully." : `${ids.length} tickets deleted successfully.`);
+  };
+
+  const updateStatuses = (ids, status) => {
+    const updatedAt = new Date().toISOString();
+    setTickets((current) => current.map((ticket) => (
+      ids.includes(ticket.id) ? { ...ticket, status, updatedAt } : ticket
+    )));
+    setNotice(ids.length === 1
+      ? `Ticket status changed to ${status}.`
+      : `${ids.length} tickets moved to ${status}.`);
   };
 
   const updateStatus = (id, status) => {
-    setTickets((current) => current.map((ticket) => (
-      ticket.id === id
-        ? { ...ticket, status, updatedAt: new Date().toISOString() }
-        : ticket
-    )));
-    setNotice(`Ticket status changed to ${status}.`);
+    updateStatuses([id], status);
   };
 
-  return { tickets, notice, setNotice, createTicket, updateTicket, deleteTicket, updateStatus };
+  return { tickets, notice, setNotice, createTicket, updateTicket, deleteTicket, deleteTickets, updateStatus, updateStatuses };
 }
 
 export default useTicketStore;
