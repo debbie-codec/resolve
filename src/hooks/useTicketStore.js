@@ -3,6 +3,8 @@ import { tickets as seedTickets } from "../data/tickets";
 
 const STORAGE_KEY = "resolve.tickets.v1";
 
+// Read saved tickets from this browser.
+// localStorage is used like a small database because the app has no server.
 function readStoredTickets() {
   try {
     const stored = window.localStorage.getItem(STORAGE_KEY);

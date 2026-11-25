@@ -1,45 +1,35 @@
-import { NavLink } from "react-router-dom";
-import { LayoutDashboard, Ticket, Layers3 } from "lucide-react";
+// A small reusable card for a label and number.
+// Icon, iconClass, and bg are Tailwind class names supplied by the parent.
+function StatCard({
+  label,
+  value,
+  icon: Icon,
+  iconClass = "",
+  bg = "bg-stone-100",
+  iconSize = 18,
+  labelClassName = "text-xs",
+  valueClassName = "mt-1 block text-2xl leading-none",
+  dashboard = false,
+  change,
+}) {
+  const alignment = dashboard ? "items-start" : "items-center";
 
-const linkClass = ({ isActive }) =>
-  `w-full flex items-center gap-3 p-3 rounded-lg text-left font-medium transition-colors ${
-    isActive ? "bg-[#a34b32] text-white" : "text-orange-100 hover:bg-white/10"
-  }`;
-
-function Sidebar() {
   return (
-    <aside className="w-60 min-h-screen bg-[#642b1b] text-white flex flex-col p-5">
-
-      {/* Brand section */}
-      <div className="flex items-center gap-3 border-b border-white/20 pb-6 mb-7">
-        <Layers3 size={38} className="text-[#e6ad59]" />
-
-        <div>
-          <h1 className="text-2xl font-bold tracking-wide">Resolve</h1>
-
-          <p className="text-xs text-orange-100 mt-1">
-            Customer Support
-            <br />
-            Ticket Management
-          </p>
-        </div>
+    <article className={`surface-panel flex ${alignment} gap-3 p-4`}>
+      <span className={`grid h-9 w-9 shrink-0 place-items-center rounded-full ${bg} ${iconClass}`}>
+        {Icon && <Icon size={iconSize} />}
+      </span>
+      <div>
+        <p className={`${labelClassName} text-stone-500`}>{label}</p>
+        <strong className={valueClassName}>{value}</strong>
+        {change && (
+          <small className={`mt-2 flex items-center text-[10px] ${change.startsWith("+") ? "text-green-600" : "text-rose-500"}`}>
+            {change.startsWith("+") ? "↗ " : "↘ "}{change} vs. last 7 days
+          </small>
+        )}
       </div>
-
-      {/* Navigation */}
-      <nav aria-label="Main" className="space-y-2">
-        <NavLink to="/" end className={linkClass}>
-          <LayoutDashboard size={21} />
-          <span>Dashboard</span>
-        </NavLink>
-
-        <NavLink to="/tickets" className={linkClass}>
-          <Ticket size={21} />
-          <span>Tickets</span>
-        </NavLink>
-      </nav>
-
-    </aside>
+    </article>
   );
 }
 
-export default Sidebar;
+export default StatCard;

@@ -1,5 +1,7 @@
 import { CheckCircle2, Clock3, Ticket } from "lucide-react";
 
+// These styles describe the four dashboard summary cards.
+// "status" is null for the card that should count every ticket.
 const ticketStatStyles = [
   { label: "Total", status: null, icon: Ticket, iconClass: "text-amber-700", bg: "bg-[#fff1d9]" },
   { label: "Open", status: "Open", icon: Ticket, iconClass: "text-rose-500", bg: "bg-[#fff0ed]" },
@@ -20,13 +22,40 @@ export const tickets = [
   { id: "#RSV-7828", title: "Unable to add new team members", description: "Inviting a new teammate fails before they can join the account.", category: "Account Management", customer: "Harborlight Capital", priority: "Medium", status: "Resolved", assignee: "Mia Carter", avatar: "MC", createdAt: "2026-06-24T10:57:00.000Z", updatedAt: "2026-06-24T10:57:00.000Z" },
 ];
 
+// Create the dashboard card values from the live ticket list.
+// This function runs again after a ticket is created, changed, or deleted,
+// so the displayed numbers stay in sync with the stored ticket data.
 export function getTicketStats(ticketList) {
-  return ticketStatStyles.map(({ status, ...style }) => ({
-    ...style,
-    value: String(status ? ticketList.filter((ticket) => ticket.status === status).length : ticketList.length),
-  }));
+  const result = [];
+
+  for (let index = 0; index < ticketStatStyles.length; index += 1) {
+    const card = ticketStatStyles[index];
+    let value = ticketList.length;
+
+    if (card.status !== null) {
+      value = 0;
+      for (let ticketIndex = 0; ticketIndex < ticketList.length; ticketIndex += 1) {
+        if (ticketList[ticketIndex].status === card.status) {
+          value += 1;
+        }
+      }
+    }
+
+    result.push({
+      label: card.label,
+      status: card.status,
+      icon: card.icon,
+      iconClass: card.iconClass,
+      bg: card.bg,
+      value: String(value),
+    });
+  }
+
+  return result;
 }
 
+// Convert an ISO date into text that is easy for a person to read.
+// "undefined" asks the browser to use the user's local language and region.
 export function formatTicketDate(date) {
   return new Date(date).toLocaleString(undefined, {
     dateStyle: "medium",

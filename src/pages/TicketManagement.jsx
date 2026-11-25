@@ -12,13 +12,24 @@ import { getTicketStats } from "../data/tickets";
 const PAGE_SIZE = 8;
 
 function nextTicketId(tickets) {
-  const maxNumber = tickets.reduce((maximum, ticket) => {
-    const number = Number(ticket.id.match(/\d+/)?.[0] ?? 0);
-    return Math.max(maximum, number);
-  }, 0);
-  return `#RSV-${maxNumber + 1}`;
+  // Find the largest numeric suffix before creating the next id.
+  // This keeps new ids unique even after an older ticket was deleted.
+  let largestNumber = 0;
+
+  for (let index = 0; index < tickets.length; index += 1) {
+    const ticketId = tickets[index].id;
+    const numberText = ticketId.match(/\d+/)?.[0] ?? "0";
+    const number = Number(numberText);
+    if (number > largestNumber) {
+      largestNumber = number;
+    }
+  }
+
+  return `#RSV-${largestNumber + 1}`;
 }
 
+// TicketManagement owns search, filters, sorting, pagination, selection,
+// and switching between the table, create form, and details view.
 function TicketManagement({
   tickets,
   initialTicketId,
@@ -60,6 +71,7 @@ function TicketManagement({
   const pageCount = Math.max(1, Math.ceil(filteredTickets.length / PAGE_SIZE));
   const currentPage = Math.min(page, pageCount);
   const visibleTickets = filteredTickets.slice((currentPage - 1) * PAGE_SIZE, currentPage * PAGE_SIZE);
+  // "Select all" applies to the current page, not every filtered result.
   const allSelected = visibleTickets.length > 0 && visibleTickets.every((ticket) => selected.includes(ticket.id));
   const selectedTicket = tickets.find((ticket) => ticket.id === selectedTicketId);
   const selectedTickets = tickets.filter((ticket) => selected.includes(ticket.id));
@@ -73,6 +85,7 @@ function TicketManagement({
 
   const applyBulkAction = () => {
     if (bulkAction === "delete") {
+      // App owns the confirmation dialog; deletion happens only after confirmation.
       if (selectedTickets.length > 0) onDeleteTicket(selectedTickets);
       setSelected([]);
       setBulkAction("");
@@ -126,7 +139,11 @@ function TicketManagement({
     setPage(1);
   };
 
-  if (editingTicket || editingTicket === null && selectedTicketId === "new") {
+  // "new" is a special state value used to show the create form.
+  // If editingTicket has a real object, the same form becomes an edit form.
+  const shouldShowTicketForm = editingTicket !== null || selectedTicketId === "new";
+
+  if (shouldShowTicketForm) {
     return (
       <TicketCreate
         onBack={() => {

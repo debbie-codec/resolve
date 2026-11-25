@@ -1,6 +1,9 @@
 import { Bell, Search } from "lucide-react";
 import UserProfile from "./UserProfile";
 
+// The title and description can be overridden by pages.
+// The search and notification controls are visual placeholders because
+// this project does not connect to a search or notification service.
 function PageHeader({ title = "Good afternoon, Alex 👋", description = "Here's what's happening with your support operations today." }) {
   return (
     <header className="mb-4 grid grid-cols-1 gap-3 md:grid-cols-[minmax(0,1fr)_auto] md:items-center">

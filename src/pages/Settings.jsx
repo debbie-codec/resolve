@@ -11,7 +11,10 @@ const initialProfile = {
   location: "San Francisco, CA",
 };
 
+// This page demonstrates account settings and password validation.
+// It does not send profile or password changes to a real account service.
 function Settings() {
+  // Profile and password fields are UI demonstrations; no account service is connected.
   const [activeTab, setActiveTab] = useState("account");
   const [profile, setProfile] = useState(initialProfile);
   const [avatar, setAvatar] = useState("");

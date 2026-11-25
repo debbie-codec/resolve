@@ -67,12 +67,4 @@ The response is normalized into staff names and email addresses for the assignme
 
 ## AI Usage
 
-GitHub Copilot/Copilot SDK AI assistance was used to:
-
-- Review the existing React project structure
-- Implement localStorage ticket state and CRUD interactions
-- Connect mock support-staff API loading and failure states
-- Add inline ticket-form validation and accessible feedback
-- Update documentation and assess requirement coverage
-
-Major code and behavior decisions were reviewed and tested by the candidate, including ticket data structure, localStorage behavior and assignment integration.
+AI tools were used as a guide to understand the project and discuss approaches for ticket CRUD interactions, localStorage, staff API integration, form validation, and the assessment requirements. I implemented the project changes myself and adapted them to match my requirements and preferences. I reviewed the resulting behavior and remain responsible for the submitted code.

@@ -1,5 +1,7 @@
 import { Plus, Search, SlidersHorizontal } from "lucide-react";
 
+// These inputs do not save data themselves.
+// TicketManagement owns their values and receives each change through a callback.
 function TicketToolbar({ search, onSearch, status, onStatus, priority, onPriority, showFilters, onToggleFilters, onNewTicket }) {
   return (
     <div className="flex flex-wrap items-center gap-2 px-4 py-3">

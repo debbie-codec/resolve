@@ -1,6 +1,8 @@
 import { ChevronLeft, ChevronRight } from "lucide-react";
 
 function TicketPagination({ count, page, pageCount, pageSize, onPageChange }) {
+  // Calculate the displayed range.
+  // If there are no tickets, both the first and last item should be zero.
   const firstItem = count === 0 ? 0 : (page - 1) * pageSize + 1;
   const lastItem = Math.min(page * pageSize, count);
 

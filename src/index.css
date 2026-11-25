@@ -1,5 +1,9 @@
 @import "tailwindcss";
 
+/*
+ * These variables and reusable classes define the shared visual foundation.
+ * Individual React components can also use Tailwind classes directly.
+ */
 :root {
   color: #292524;
   background: #f8f5f0;

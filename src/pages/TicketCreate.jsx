@@ -15,6 +15,7 @@ const categories = [
 const priorities = ["Urgent", "High", "Medium", "Low"];
 const statuses = ["Open", "In Progress", "Resolved"];
 
+// Field gives every form field the same label, required mark, and error layout.
 function Field({ id, label, error, children }) {
   return (
     <div className="grid gap-1.5 text-[10px] font-semibold text-stone-600">
@@ -25,6 +26,7 @@ function Field({ id, label, error, children }) {
   );
 }
 
+// TicketCreate is used for both creating a new ticket and editing an existing ticket.
 function TicketCreate({
   onBack,
   onSubmit,
@@ -55,6 +57,7 @@ function TicketCreate({
   const handleSubmit = (event) => {
     event.preventDefault();
     const nextErrors = {};
+    // Check required text/select fields together, then enforce the title limit.
     ["title", "description", "category", "priority", "status"].forEach((field) => {
       if (!values[field].trim()) nextErrors[field] = "This field is required.";
     });
@@ -65,6 +68,7 @@ function TicketCreate({
     setErrors(nextErrors);
     if (Object.keys(nextErrors).length > 0) return;
 
+    // Trim user-entered text before handing the values to the ticket store.
     onSubmit({
       ...values,
       title: values.title.trim(),

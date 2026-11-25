@@ -1,6 +1,7 @@
 import { ChevronDown } from "lucide-react";
 
 function UserProfile({ compact = false }) {
+  // In compact headers, hide profile details until the extra-large breakpoint.
   const detailsClass = compact ? "hidden xl:block" : "hidden sm:block";
 
   return (

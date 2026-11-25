@@ -16,6 +16,8 @@ const links = [
   { label: "Settings", icon: Settings },
 ];
 
+// Sidebar asks App to change the active page by calling onNavigate.
+// It also receives the live ticket count for the Tickets badge.
 function Sidebar({ activeView = "Tickets", onNavigate, ticketCount = 0 }) {
   return (
     <aside className="sticky top-0 flex h-screen w-14 shrink-0 flex-col bg-[#642d1d] px-2 py-4 text-orange-50 sm:w-16 lg:w-52 lg:px-3">
@@ -27,6 +29,7 @@ function Sidebar({ activeView = "Tickets", onNavigate, ticketCount = 0 }) {
         </span>
       </a>
 
+      {/* Keep navigation labels centralized so active state and actions stay consistent. */}
       <nav className="mt-5 grid gap-1" aria-label="Main navigation">
         {links.map(({ label, icon: Icon }) => (
           <button

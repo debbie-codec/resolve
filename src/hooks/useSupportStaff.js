@@ -2,6 +2,8 @@ import { useEffect, useState } from "react";
 
 const STAFF_API_URL = "https://jsonplaceholder.typicode.com/users";
 
+// This custom hook loads staff from a web service and exposes:
+// staff, loading/error state, and a retry function.
 function useSupportStaff() {
   const [staff, setStaff] = useState([]);
   const [status, setStatus] = useState("loading");
@@ -9,6 +11,7 @@ function useSupportStaff() {
   const [attempt, setAttempt] = useState(0);
 
   useEffect(() => {
+    // Cancel an in-flight request if the component unmounts or a retry starts.
     const controller = new AbortController();
 
     async function loadStaff() {
@@ -26,6 +29,7 @@ function useSupportStaff() {
           throw new Error("The staff service returned an unexpected response.");
         }
 
+        // Keep only records the app can use, then map them to its staff shape.
         setStaff(users.filter((user) => (
           user
           && (typeof user.id === "string" || typeof user.id === "number")
@@ -51,6 +55,7 @@ function useSupportStaff() {
     return () => controller.abort();
   }, [attempt]);
 
+  // Changing attempt triggers the effect again and retries the request.
   return { staff, status, error, retry: () => setAttempt((current) => current + 1) };
 }
 

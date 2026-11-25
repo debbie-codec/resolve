@@ -1,5 +1,7 @@
 import { X } from "lucide-react";
 
+// This modal is an older, visual-only example.
+// It currently closes without creating or saving a real ticket.
 function NewTicketModal({ open, onClose }) {
   if (!open) return null;
 

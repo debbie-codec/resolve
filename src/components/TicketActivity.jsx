@@ -2,7 +2,10 @@ import { useState } from "react";
 import { Activity, RefreshCw } from "lucide-react";
 
 function TicketActivity({ ticket, previousStatus }) {
+  // All activity text is sample data for the prototype.
+  // Filtering only changes what is visible on this screen.
   const [filter, setFilter] = useState("all");
+  // These entries are illustrative UI content, not a persisted ticket event history.
   const activities = [
     {
       id: "latest-comment",

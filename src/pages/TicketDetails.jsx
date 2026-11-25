@@ -31,6 +31,7 @@ function DetailCard({ title, icon: Icon, children }) {
   );
 }
 
+// TicketDetails is a read-only summary and quick-action screen for one ticket.
 function TicketDetails({
   ticket,
   onBack,
@@ -39,6 +40,7 @@ function TicketDetails({
   onDeleteTicket,
   onUpdateStatus,
 }) {
+  // The activity panel is sample content, so this is only an illustrative prior status.
   const previousStatus = ticket.status === "Open" ? "In Progress" : "Open";
 
   return (

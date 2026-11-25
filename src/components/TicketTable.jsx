@@ -1,20 +1,10 @@
 import { useState } from "react";
 import { MoreHorizontal } from "lucide-react";
 import { formatTicketDate } from "../data/tickets";
+import { PriorityBadge, StatusBadge } from "./TicketBadge";
 
-function priorityClass(priority) {
-  if (priority === "Urgent") return "bg-rose-50 text-rose-700";
-  if (priority === "High") return "bg-orange-50 text-orange-700";
-  if (priority === "Medium") return "bg-amber-50 text-amber-700";
-  return "bg-stone-100 text-stone-600";
-}
-
-function statusClass(status) {
-  if (status === "Open") return "bg-rose-50 text-rose-700";
-  if (status === "Resolved") return "bg-green-50 text-green-700";
-  return "bg-amber-50 text-amber-700";
-}
-
+// TicketTable only presents rows and reports checkbox/menu actions to its parent.
+// The parent owns which tickets are selected and when the app deletes one.
 function TicketTable({ tickets, selected, allSelected, onToggleAll, onToggleSelected, onOpenTicket, onDeleteTicket }) {
   const [openMenuId, setOpenMenuId] = useState(null);
 
@@ -35,8 +25,8 @@ function TicketTable({ tickets, selected, allSelected, onToggleAll, onToggleSele
               <td className="max-w-48 px-2 py-2"><button type="button" onClick={(event) => { event.stopPropagation(); onOpenTicket?.(ticket); }} className="block max-w-full truncate text-left font-medium text-[#8e3d29] underline-offset-2 hover:underline">{ticket.title}</button></td>
               <td className="px-2 py-2 text-stone-600"><span className="mr-1 text-stone-400">▱</span>{ticket.customer}</td>
               <td className="px-2 py-2 text-stone-600">{ticket.category}</td>
-              <td className="px-2 py-2"><span className={`rounded-full px-2 py-1 text-[9px] ${priorityClass(ticket.priority)}`}>{ticket.priority}</span></td>
-              <td className="px-2 py-2"><span className={`rounded-full px-2 py-1 text-[9px] ${statusClass(ticket.status)}`}>{ticket.status}</span></td>
+              <td className="px-2 py-2"><PriorityBadge priority={ticket.priority} /></td>
+              <td className="px-2 py-2"><StatusBadge status={ticket.status} /></td>
               <td className="px-2 py-2"><span className="inline-flex items-center gap-1.5"><i className="grid h-6 w-6 place-items-center rounded-full bg-[#d7c2ae] text-[8px] font-semibold not-italic text-[#5c4638]">{ticket.avatar}</i>{ticket.assignee}</span></td>
               <td className="whitespace-nowrap px-2 py-2 text-stone-500">{formatTicketDate(ticket.createdAt)}</td>
               <td className="relative px-2 py-2">
@@ -45,6 +35,7 @@ function TicketTable({ tickets, selected, allSelected, onToggleAll, onToggleSele
                   aria-label={`More options for ${ticket.id}`}
                   aria-expanded={openMenuId === ticket.id}
                   onClick={(event) => {
+                    // Keep the row click from opening the ticket while using its menu.
                     event.stopPropagation();
                     setOpenMenuId((current) => current === ticket.id ? null : ticket.id);
                   }}
